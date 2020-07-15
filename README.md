@@ -7,6 +7,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 ## 목차
 
 - [Ch01 - 안녕 리액트?](#ch01)
+- [Ch02 - 리액트로 클론 코딩 시작하기](#ch02)
 
 ---
 
@@ -71,3 +72,92 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     ```
 
 ---
+
+<a id="ch02"></a>
+
+## Ch02 - 리액트로 클론 코딩 시작하기
+
+1. create-react-app으로 리액트 앱 만들기
+
+    facebook에서 관리하는 React Boilerplate code 설치하기 
+
+    > 보일러 플레이트(boilerplate)란 개발을 바로 시작할 수 있도록 만든 기초 환경을 말한다.
+
+    ```
+    >npx create-react-app movie_app_2020
+    Success! Created movie_app_2020 at C:\movie_app_2020
+    Inside that directory, you can run several commands:
+
+        npm start
+            Starts the development server.
+    (생략...)
+    ```
+
+    npx는 create-react-app을 다운로드한 다음 create-react-app movie_app_2020 명령어를 실행하여 리액트 앱을 생성해 준다.
+
+1. 리액트 앱 실행하기
+
+    ```
+    > npm start
+    Compiled successfully!
+
+    You can now view movie_app_2020 in the browser.
+
+        Local:              http://localhost:3000
+        On Your Network:    http://192.168.0.192:3000
+    
+    (생략...)
+    ```
+
+    ![react_start](./Image/react_start.png)
+
+1. 리액트 동작 원리 알아보기
+
+    리액트는 우리가 작성한(또는 수정한) 프로젝트 폴더에 있는 코드를 자바스크립트를 이용하여 해석한다. 그리고 해석한 결과물을 index.html로 끼워 넣는다. 그림으로 표현하면 아래와 같다.
+
+    ![index.html](./Image/index.png)
+
+    리액트는 index.html의 `<div id="root"></div>` 중간에 넣을 결과물을 프로젝트 폴더에 있는 파일(App.js,...)을 해석하여 만들어 넣는 역할을 담당한다.
+
+1. index.js 살펴보기
+
+    index.js폴더를 열어서 아래와 같이 표시된 부분을 살펴보자.
+    
+    ```js
+    ReactDOM.render(<App />, document.getElementById('root'));
+    ```
+    
+    이 코드가 바로 App.js 파일에 작성한 코드를 index.html의 아이디가 'root'인 엘리먼트에 넣어 주는 것이다.
+
+1. index.html 수정해 보기
+
+    index.html 파일을 열어서 `<div id="root"></div>`을 `<div id="potato"></div>`로 바꿔 보자.
+
+    ```html
+    (생략...)
+        <body>
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="potato"></div>
+            (생략...)
+        </body>
+    </html>
+    ```
+
+    이렇게 하면 아이디가 "potato"로 바뀌니까 앱이 실행되지 않는것을 볼 수 있다.
+
+    > `<App />`을 아이디가 'root'인 엘리먼트에 그려지는데 아이디가 'root'에서 'potato'로 바뀌었으므로 오류가 발생한 것이다.
+
+1. index.js 수정하여 오류 해결하기
+
+    index.html에서 수정한 코드에 맞춰 index.js 파일의 document.getElementById('root')를 document.getElementById('potato')로 수정해 보자.
+
+    ```js
+    ReacDOM.render(<App />, document.getElementById('potato'));
+    ```
+
+    그러면 리액트 앱이 정상으로 작동한다. 리액트는 index.js에 있는 ReactDOM.render()를 통해 App.js에 있는 `<div>와</div>사이`에 있는 내용을 index.html에 넣어준다. 이 방식은 리액트가 화면을 빠르게 그릴 수 있게 해 주는 장점도 있다.
+
+    ![index.html](./Image/index_html.png)
+
+    그림을 통해 설명하자면, 가장 왼쪽은 빈 index.html이고 오른쪽은 App.js를 해석하며 점점 채워지는 index.html이다. 그림에서 보듯 리액트는 처음부터 모든 HTML을 그려넣지 않는다. 일부 HTML만 그리고 이후 엘리먼트를 추가하거나 제거하는 방식으로 화면을 그린다. 리액트는 화면에 표시된 모든 HTML을 처음부터 그리지 않기 때문에 빠르다.
+
