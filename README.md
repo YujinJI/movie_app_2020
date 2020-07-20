@@ -9,6 +9,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 - [Ch01 - 안녕 리액트?](#ch01)
 - [Ch02 - 리액트로 클론 코딩 시작하기](#ch02)
 - [Ch03 - 리액트 기초 개념 알아보기](#ch03)
+- [Ch04 - 슈퍼 똑똑하게 컴포넌트 만들기](#ch04)
 
 ---
 
@@ -553,7 +554,443 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     1. JSX를 이용해서 컴포넌트를 작성했다. 컴포넌트의 이름은 대문자로 시작해야 하고
     1. 컴포넌트에 데이터를 전달할 때는 props를 사용하면 된다. 컴포넌트에 props를 전달하면 props에 있는 데이터가 하나의 객체로 변환되어 컴포넌트(함수)의 인자로 전달되고, 이걸 받아서 컴포넌트(함수)에서 사용할 수 있었다. ES6의 구조 분해 할당을 사용하면 props를 좀 더 편리한 방법으로 사용할 수 있었다.
 
+<a id="ch04"></a>
+## Ch04 - 슈퍼 똑똑하게 컴포넌트 만들기
 
+    이전에 작성한 App.js 파일을 열어 코드가 효율적인지 확인해보자. 새 음식을 추가할 때마다 <Food fav="..." />를 복사해야 하기 때문이 이 코드는 효율적이지 않다. 만약 음식이 1000개라면 1000개를 반복해서 작성해야 하고, fav props에 다른 값을 입력해 줘야 한다. 또 서버에서 음식 데이터를 받아 출력하는 경우, 음식 데이터의 개수를 알 수 없다면 이 방법은 문제가 될 수 있다. 이 문제를 해결하는 방법에 대해 알아보자.
+
+1. 음식 데이터 만들기
+
+    서버에서 넘어온 데이터를 저장할 수 있도록 FoodILike라는 변수를 만든 다음 빈 배열을 할당하자.
+
+    ```js
+    import React from 'react';
+
+    function Food({ fav }) {
+        return <h1>I like {fav}</h1>;
+    }
+
+    const foodILike = [];
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello</h1>
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+    서버에서 데이터가 넘어온다고 상상하면서 다음과 같이 코드를 작성해 보자. image 키값의 경우 인터넷에서 찾은 이미지의 주소를 복사하여 붙여 넣은 것이다.
+
+    ```js
+    import React from 'react';
+
+    function Food({fav}) {
+    return <h1>I like {fav}</h1>;
+    }
+
+    const foodILike = [
+    {
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+    },
+    {
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+    },
+    {
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+    },
+    {
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+    },
+    {
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+        <h1>Hello</h1>
+        </div>
+    );
+    }
+
+    export default App;
+    ```
+
+    이제 foodILike에 있는 데이터를 이용하여 여러 개의 컴포넌트를 만들어 보자.
+
+1. [map() 함수](https://velog.io/@daybreak/Javascript-map%ED%95%A8%EC%88%98)로 컴포넌트 많이 만들기
+
+    map() 함수에 대한 간단한 설명
+
+    ![console_map](./Image/friends.png)
+
+    여기서 map() 함수의 2가지 특징을 알 수 있다.
+
+    **첫 번째**는 map() 함수의 인자로 전달한 함수는 배열 friends의 원소를 대상으로 실행된다는 것이다. friends에는 4개의 원소가 들어 있으니까 함수는 4번 실행된다. **두 번째**는 그 함수가 반환한 값이 모여 배열이 되고, 그 배열이 map() 함수의 반환값이 된다는 것이다.
+    
+    이 특징을 이용하여 current 인자에 하트를 추가하여 반환해 보자.
+
+    ![friend+heart](./Image/friend_heart.png)
+
+    여기서는 화살표 함수가 아니라 이름 없는 함수를 전달했다. 이름 없는 함수의 friend에는 friends 배열의 원소가 하나씩 넘어오고, 그 원소에 하트를 붙여 반환하니까 사진과 같은 결과를 얻을 수 있다.
+
+    이제 map() 함수를 foodILike 배열에 적용하여 코드를 작성해 보자.    
+
+     ```js
+    import React from 'react';
+
+    function Food({ name }) {
+    return <h1>I like {name}</h1>;
+    }
+
+    const foodILike = [
+    {
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+    },
+    {
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+    },
+    {
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+    },
+    {
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+    },
+    {
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+            {foodILike.map(dish => (<Food name={dish.name} />))}
+        </div>
+    );
+    }
+
+    export default App;
+    ```   
+
+    ![map](./Image/map.png)
+
+    여기서 가장 중요한 부분은 `{foodILike.map(dish =>(Food name={dish.name} />))}` 이다. dish에 foodILike 배열에 있는 원소가 하나씩 넘어가고, 그 원소는 {name:'...', image:'...'}와 같은 객체 형태이므로 Food 컴포넌트에 dish.name과 같이 음식 이름을 name props로 넘겨준 것이다. 결국 map() 함수는 `[<Food name={...} />,...]`와 같이 Food 컴포넌트 원소 5개를 가진 배열을 반환할 것이다. 그 결과 음식 이름 5개가 화면에 표시되는 것이다.
+
+    Food 컴포넌트에 음식 이미지 출력하기
+
+    Food 컴포넌트에 picture props를 추가하자. picture props에 dish.image를 전달할 것이다.
+
+    ```js
+    import React from 'react';
+
+    function Food({ name, picture }) {
+    return (
+        <div>
+            <h2>I like {name}</h2>
+            <img src={picture} />
+        </div>
+    );
+    }
+
+    const foodILike = [
+    {
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+    },
+    {
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+    },
+    {
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+    },
+    {
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+    },
+    {
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+        {foodILike.map(dish => (<Food name={dish.name} picture={dish.image} />))}
+        </div>
+    );
+    }
+
+    export default App;
+    ```
+
+    ![picture1](./Image/picture1.png)
+    ![picture2](./Image/picture2.png)
+    ![picture3](./Image/picture3.png)
+
+    이렇게 map() 함수를 사용하면 배열에 데이터가 몇 개 있든지 컴포넌트를 여러 개 손쉽게 출력할 수 있다.
+
+1. map() 함수로 만든 컴포넌트에 key props 추가하기
+
+    [key props가 필요한 이유](https://www.awesomezero.com/development/react-key/)
+
+    이전에 작성한 코드를 [Console] 탭의 경고 메시지를 한번 읽어보면, '리스트의 각 원소는 유일한 "key" prop을 가져야 한다'고 한다. 배열 속성을 보면 key의 값이 실제로 없어서(null) 이런 메시지가 나온 것이다. 리액트의 원소들은 유일해야 하는데 리액트 원소가 리스트에 포함되면서 유일성이 없어진 것이다.
+
+    이 문제를 해결하기 위해 foodILike 배열 원소에 id라는 값을 추가하자.
+
+    ```js
+    (생략...)
+    const foodILike = [
+    {
+        id: 1,
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+    },
+    {
+        id: 2,
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+    },
+    {
+        id: 3,
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+    },
+    {
+        id: 4,
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+    },
+    {
+        id: 5,
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+        {foodILike.map(dish => (<Food name={dish.name} picture={dish.image} />))}
+        </div>
+    );
+    }
+
+    export default App;
+    ```
+
+    리액트는 Food 컴포넌트가 서로 다르다는 것을 알 방법이 없기 때문에 데이터에 id를 추가한다. 그리고 리액트에게 컴포넌트가 서로 다르다는 것을 알려 주는 방법이 컴포넌트에 key props를 추가해 주는 것이다.
+
+    Food 컴포넌트에 key props를 추가하자. key props의 값으로 {dish.id}를 전달하면 된다.
+
+    ```js
+    (생략...)
+    function App() {
+        return (
+            <div>
+                {foodILike.map(dish => (<Food key={dish.id} namd={dish.name} picture={dish.image} />))}
+            </div>
+        );
+    }
+    (생략...)
+    ```
+
+1. img 엘리먼트에 alt 속성 추가하기
+
+    다음과 같이 Food 컴포넌트를 수정해 보자. alt 속성을 추가하고 거기에 {name}을 대입한 것이다. 그러면 메시지가 없어질 것이다.
+
+    ```js
+    (생략...)
+    function Food({ name, picture }) {
+        return (
+            <div>
+                <h2>I like {name}</h2>
+                <img src={picture} alt={name} />
+            </div>
+        );
+    }
+    (생략...)
+    ```
+
+1. 음식 데이터에 rating 추가하기
+
+    foodILike 배열의 각 요소에 rating(평점)을 추가하자. 값의 자료형은 당연히 Number이다.
+
+    > foodILike에 입력한 값이 데이터베이스에서 넘어온 값이라고 상상해 보자.
+
+    ```js
+    import React from 'react';
+
+    function Food({ name, picture }) {
+    return (
+        <div>
+            <h2>I like {name}</h2>
+            <img src={picture} />
+        </div>
+    );
+    }
+
+    const foodILike = [
+    {
+        id: 1,
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+        rating: 5,
+    },
+    {
+        id: 2,
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+        rating: 4.5,
+    },
+    {
+        id: 4,
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+        rating: 4.0,
+    },
+    {
+        id: 5,
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+        rating: 3.5,
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+        {foodILike.map(dish => (<Food name={dish.name} picture={dish.image} />))}
+        </div>
+    );
+    }
+
+    export default App;
+    ```
+
+    rating이 포함된 음식 데이터가 준비되었다. 이제 rating props를 Food 컴포넌트에 전달하면서 이 값을 검사해 보자. 그러려면 props의 자료형을 검사할 수 있도록 만들어 주는 prop-types라는 도구를 설치해야 한다.
+
+1. [prop-types](https://ko.reactjs.org/docs/typechecking-with-proptypes.html) 설치하기
+
+    터미널에 명령을 입력해서 prop-types를 설치
+
+    ```
+    > npm install prop-types
+    ```
+
+    package.json 파일을 열어 dependencies 키에 있는 값을 살펴보자. 그 중에 prop-types가 있으면 설치가 잘 된것이다.
+
+1. prop-types 적용하기
+
+    import PropTypes from 'prop-types';를 Add.js 파일 맨 위에 추가헤 주자. 그리고 rating props를 Food 컴포넌트에 전달하자.
+
+    ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+
+    function Food({ name, picture, rating }) {
+    return (
+        <div>
+            <h2>I like {name}</h2>
+            <h4>{rating}/5.0</h4>
+            <img src={picture} />
+        </div>
+    );
+    }
+
+    const foodILike = [
+    {
+        id: 1,
+        name: 'Kimchi',
+        image: 'https://www.bgw.kr/wp-content/uploads/2019/12/%EC%88%98%EC%9E%85%EA%B9%80%EC%B9%98.png',
+        rating: 5,
+    },
+    {
+        id: 2,
+        name: 'Samgyeopsal',
+        image: 'https://i.pinimg.com/originals/c4/c5/d5/c4c5d5d428634b5ddf1aabd9f98faf60.jpg',
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: 'Bibimbap',
+        image: 'https://img.etoday.co.kr/pto_db/2019/07/600/20190726153503_1350707_1200_876.jpg',
+        rating: 4.5,
+    },
+    {
+        id: 4,
+        name: 'Doncasu',
+        image: 'https://post-phinf.pstatic.net/MjAyMDA0MTZfMjY3/MDAxNTg2OTk5MzYwOTMw.YZk3XJCkJqOrZmSzXTGfnXcfoj5CoLQfY9kEBhBmlyYg.WdEgjt1SmPLlCfi8nmVMB79FymTDi3ApEfQJrGF57Acg.JPEG/1.jpg?type=w1200',
+        rating: 4.0,
+    },
+    {
+        id: 5,
+        name: 'Kimbap',
+        image: 'https://www.nongsaro.go.kr/ps/img/interabang/num207/headerImg.jpg',
+        rating: 3.5,
+    },
+    ];
+
+    function App() {
+    return (
+        <div>
+        {foodILike.map(dish => (<Food name={dish.name} picture={dish.image} rating={dish.rating} />))}
+        </div>
+    );
+    }
+
+    export default App;
+    ```
+    
+    ![rating](./Image/rating.png)
+
+    아직 prop-types를 적용하진 않았지만 앱을 실행해 보면 rating props로 전달한 값이 잘 출력될 것이다.
+
+    다음과 같이 Food.propType를 작성해 보자. 모든 props는 문자열이고 반드시 있어야 한다는 조건을 추가했다.
+
+    ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+
+    function({ name, picture, rating}) { (생략...) }
+
+    const foodILike = [ (생략...) ];
+
+    function App() { (생략...) }
+
+    Food.propTypes = {
+        name: PropTypes.string.isRequired,
+        picture: PropTypes.string.isRequired,
+        rating: PropTypes.string.isRequired,
+    };
+    
+    export default App;
+    ```
+
+    
 
 
 
