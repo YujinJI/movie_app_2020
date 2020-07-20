@@ -406,6 +406,154 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     그러면 아무런 변화가 없을 것이다. Food 컴포넌트에 props를 보내기만 했을 뿐 아직 사용하지 않았기 때문이다. 
 
     (4) props 사용하기
+
+    Food 컴포넌트의 인자로 전달된 props 출력해보기
+
+    ```js
+    import React from 'react';
+
+    function Food(props) {
+        console.log(props);
+        return <h1>I like potato</h1>;
+    }
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello</h1>
+                 <Food fav="kimchi" something={true} papapapa={['hello', 1, 2, 3, 4, true]} />
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+    > Food() 함수의 첫 번째 인자에는 props가 넘어온다.
+
+    리액트 앱 화면은 여전히 아무런 변화가 없을 것이다. console.log() 함수는 개발자 도구의 [Console] 탭에만 영향을 주는 함수이기 때문이다.
+
+    개발자 도구를 실행해서 [Console] 탭을 눌러 보자
+
+    ![console](./Image/console.png)
+
+    Food 컴포넌트에 전달한 props(fav, something, papapapa)를 속성으로 가지는 객체(Object)가 출력되었다.
+
+    (5) props 다시 한 번 사용하기
+
+    코드를 다음과 같이 수정해보자. something, papapapa props는 사용하지 않을 것이기 때문에 지우자.
+
+    ```js
+    import React from 'react';
+
+    function Food(props) {
+        console.log(props);
+        return <h1>I like potato</h1>;
+    }
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello</h1>
+                 <Food fav="kimchi" />
+            </div>
+        );
+    }
     
+    export default App;
+    ```
+
+    그러면 콘솔에 {fav: "kimchi"}만 출력될 것이다.
+
+    ![console](./Image/console2.png)
+
+    만약 문자열 "kimchi"를 화면 그대로 출력하고 싶다면 props.fav를 중괄호로 감싸서 사용하면 된다.
+
+    ```js
+    import React from 'react';
+
+    function Food(props) {
+        return <h1>I like {props.fav}</h1>;
+    }
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello</h1>
+                 <Food fav="kimchi">
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+    ![props.fav](./Image/kimchi.png)
+
+    > Hello는 App 컴포넌트에서 바로 출력한 것이고, I like kimchi는 Food 컴포넌트에서 props를 이용하여 출력한 것이다.
+
+    객체에 있는 값을 사용하려면 점 연산자(.)를 써야 한다. fav props의 값을 사용하려면 props.fav와 같이 점 연산자를 사용해야 한다. 
+
+    [점 연산자가 궁금하다면](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Property_Accessors)
+
+
+    (6) 구조 분해 할당으로 props 사용하기
+
+    [자바스크립트 ES6의 문법](https://itstory.tk/entry/JavaScript-ES6-%EB%AC%B8%EB%B2%95-%EC%A0%95%EB%A6%AC) 중 [구조 분해 할당(desturcturing-assignment)](https://www.zerocho.com/category/ECMAScript/post/575d20a97d96d81700508ccd)을 사용하면 점 연산자를 사용하지 않아도 된다.
+
+    ```js
+    function Food(props) {
+        {fav} = props;
+        return <h1>I like {fav}</h1>;
+    }
+    ----------------------------------
+    function Food({fav}) {
+        return <h1>I like {fav}</h1>;
+    }
+    ```
+
+    > 두 방법 중 아무거나 사용해도 된다.
+
+    props에 포함된 데이터의 개수가 적으면 점 연산자를 사용하여 props.fav와 같은 방법으로 사용해도 불편하지 않지만, props에 포함된 데이터의 개수가 많아지면 매번 props.fav와 같은 방법으로 사용하면 불편하다. 이런 경우 구조 분해 할당을 사용하면 편리하다.
+
+    (7) 여러 개의 컴포넌트에 props 사용하기
+
+    Food 컴포넌트를 3개 추가하고 fav props의 값이 서로 다르도록 코드를 수정하자.
+
+    ```js
+    import React from 'react';
+
+    function Food({fav}) {
+        return <h1>I like {fav}</h1>;
+    }
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello</h1>
+                 <Food fav="kimchi" />
+                 <Food fav="ramen" />
+                 <Food fav="samgiopsal" />
+                 <Food fav="chukumi" />
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+    ![여러 개의 컴포넌트에 props 사용하기](./Image/ramen.png)
+
+    이번에는 Food 컴포넌트를 4개 사용해 각 컴포넌트에 전달한 fav props를 출력했다. 각각의 fav props에는 서로 다른 값이 들어 있으니까 같은 컴포넌트를 사용해도 서로 다른 문장이 출력된 것이다. 이것을 컴포넌트를 재사용한다고 하는 것이다.
+
+    **Ch03에서 배운 내용들**
+
+    1. 컴포넌트가 무엇인지 알아보고 JSX를 공부했다.
+    1. JSX는 단지 HTML과 자바스크립트를 조합한 문법이고
+    1. JSX를 이용해서 컴포넌트를 작성했다. 컴포넌트의 이름은 대문자로 시작해야 하고
+    1. 컴포넌트에 데이터를 전달할 때는 props를 사용하면 된다. 컴포넌트에 props를 전달하면 props에 있는 데이터가 하나의 객체로 변환되어 컴포넌트(함수)의 인자로 전달되고, 이걸 받아서 컴포넌트(함수)에서 사용할 수 있었다. ES6의 구조 분해 할당을 사용하면 props를 좀 더 편리한 방법으로 사용할 수 있었다.
+
+
+
 
 
