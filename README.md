@@ -12,6 +12,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 - [Ch02 - 리액트로 클론 코딩 시작하기](#ch02)
 - [Ch03 - 리액트 기초 개념 알아보기](#ch03)
 - [Ch04 - 슈퍼 똑똑하게 컴포넌트 만들기](#ch04)
+- [Ch05 - state와 클래스형 컴포넌트](#ch05)
 
 ---
 
@@ -1020,6 +1021,35 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     rating: PropTypes.number라고 작성하면, rating props는 필수가 아니어도 되는 항목이 된다. 다만, 값이 전달되는 경우 자료형이 number이긴 해야 한다.
 
+<a id="ch05"></a>
+## Ch05 - [state](https://ko.reactjs.org/docs/faq-state.html)와 클래스형 컴포넌트
+
+1. state로 숫자 증감 기능 만들어 보기
+
+    (1) 클래스형 컴포넌트 작성하기
+
+    ```js
+    import React from 'react';
+
+    export default App;
+    // 이 두 줄만 남기고 나머지 코드는 모두 삭제한다.
+    ```
+
+    다음과 같이 코드를 작성하자. 핵심은 App 클래스가 React.Component 클래스를 상속받도록 extends React.Component를 붙이는 것이다. 이것이 **클래스형 컴포넌트의 기본 뼈대**이다.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        // App 클래스는 React.Component 클래스를 상속받았다.
+    }
+
+    export default App;
+    ```
+
+    > 상속은 '클래스에 다른 클래스의 기능을 추가할 수 있게' 해준다. 실제로 React.Component 클래스는 500줄이 넘는 코드로 여러 기능이 구현되어 있다.
+
+    
 
 
 
