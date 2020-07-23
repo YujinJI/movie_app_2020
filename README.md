@@ -1050,7 +1050,248 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     > 상속은 '클래스에 다른 클래스의 기능을 추가할 수 있게' 해준다. 실제로 React.Component 클래스는 500줄이 넘는 코드로 여러 기능이 구현되어 있다.
 
     
+    이제 App 컴포넌트가 JSX를 반환해야 한다. 그런데 지금의 App 컴포넌트는 클래스라서(함수가 아니라서) return 문을 사용할 수 없고, 함수 형태의 App 컴포넌트처럼 JSX를 반환할 수 없다. 클래스형 컴포넌트에서는 JSX를 반환하기 위해 render() 함수를 사용한다.
 
+    다음과 같이 render() 함수를 작성해 보자.
 
+    ```js
+    import React from 'react';
 
+    class App extends React.Component {
+        render() {
+            return <h1>I'm a class component</h1>;
+        }
+    }
 
+    export default App;
+    ```
+
+    ![class_component](./Image/component.png)
+
+    결과를 보면 함수형 컴포넌트를 사용했을 때와 별 차이가 없다. 하지만 **함수형 컴포넌트는 return 문이 JSX를 반환하지만, 클래스형 컴포넌트는 render() 함수가 JSX를 반환한다.** 그리고 리액트는 클래스형 컴포넌트의 render() 함수를 자동으로 실행시켜 준다. 클래스형 컴포넌트를 사용하는 이유는 **state를 사용하기 위함**이다.
+
+    (2) state 정의하기
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        state = {
+                    // 다음과 같이 state={};라고 작성하여 state를 정의한다.
+        };
+        render() {
+            return <h1>I'm a class component</h1>;
+        }
+    }
+
+    export default App;
+    ```
+
+    (3) state에 count값 추가하고 사용하기
+
+     ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        state = {
+            count : 0,  // 다음과 같이 state에 count라는 키를 추가하고 키값으로 0을 넣는다.
+        };
+        render() {  // render() 함수에 {this.state.count}를 출력
+            return <h1>The number is: {this.state.count}</h1>;
+        }
+    }
+
+    export default App;
+    ```   
+
+    ![count](./Image/count.png)
+
+    > this.state는 현재 클래스에서 선언한 state를 의미한다. 그러므로 this.state.count는 현재 클래스에 선언한 state의 count 키값을 의미한다.
+
+    (4) 버튼을 눌러서 count state값 변경해 보기
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        count: 0,
+    };
+
+    add = () => {   // add()함수 작성
+        this.state.count = 1;   // this.state.count 마음대로 바꿔보기
+    };
+
+    minus = () => { // minus() 함수 작성
+        this.state.count = -1;  // this.state.count 마음대로 바꿔보기
+    };
+
+    render() {
+        return (    // 버튼을 누르면 동작하도록 onClick 속성 추가
+        <div>
+            <h1>The number is: {this.state.count}</h1>
+            <button onClick={this.add}>Add</button>
+            <button onClick={this.minus}>Minus</button>
+        </div>
+        );
+    }
+    }
+
+    export default App;
+    ```   
+
+    state는 말 그대로 그냥 객체니까 this.state.count = 1 또는 this.state.count = -1과 같이 값을 바꿀 수 있다고 생각할 수 있다. 그런데 코드를 작성하고 저장하면 [Console] 탭에 경고 메시지가 나타난다.
+
+    ![state_error](./Image/state_error.png)
+
+    경고 메시지의 내용은 'state를 직접 변경하지 마라'이다. 실제로 리액트는 state를 직접 변경하는 코드를 허용하지 않는다. 그래서 버튼을 눌러도 0이 1이나 -1로 변하지 않는다. **원래 리액트는 state가 변경되면 render() 함수를 다시 실행하여 변경된 state를 화면에 출력한다. 그런데 state를 직접 변경하는 경우에는 render() 함수를 다시 실행하지 않는다.** 리액트는 이런 방식으로 state를 직접 변경할 수 없도록 제한한다.
+
+    (5) setState() 함수로 count state 변경하기
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        count: 0,
+    };
+
+    add = () => {   // 다음과 같이 setState() 함수의 첫 번째 인자로 count 키와 키값을 넣은 객체를 전달해 보자.
+        this.setState({ count: 1 });    
+    };
+
+    minus = () => { 
+        this.setState({ count: -1 });
+    };
+
+    (생략...)
+    ```      
+
+    ![count:1](./Image/count_1.png)
+    ![count:-1](./Image/count_-1.png)
+
+    결과를 보니 count state가 1 또는 -1로 변하고 있다.
+
+    리액트가 setState() 함수의 호출을 감시하고 있기 때문에 setState() 함수가 동작하면 state가 새로운 값으로 바뀌고, 이어서 render() 함수를 동작시켜 화면을 업데이트시키는 것이다.
+
+    ![setState](./Image/setState.png)
+
+    > setState() 함수에 새로운 객체를 전달하면 리액트가 자동으로 state에 반영해 줍니다.
+
+    (6) 버튼을 누르면 count state의 값을 증가 또는 감소시키기
+
+     ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        count: 0,
+    };
+
+    add = () => {  // count state를 1만큼 증가
+        this.setState({ count: this.state.count + 1 });    
+    };
+
+    minus = () => { // count state를 1만큼 감소
+        this.setState({ count: this.state.count - 1 });
+    };
+
+    (생략...)
+    ```     
+
+    앱을 실행하면 잘 동작할 것이다. 다만 { count: this.state.count + 1 }와 같이 코드를 작성하여 state를 업데이트하는 방법은 성능 문제가 생길 수 있어서 좋지 않다. 그 대신 setState() 함수의 인자로 함수를 전달하면 성능 문제 없이 state를 업데이트 할 수 있다.
+
+    다음과 같이 current 인자를 받아 객체 ({ count: current.count + 1 })를 반환하는 함수를 작성하여 setState() 함수에 전달해 보고 결과를 확인하면서 **add, minus() 함수를 개선**하자.
+
+      ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        count: 0,
+    };
+
+    add = () => {  // current에는 현재 state가 넘어와 그 state의 count에 1을 더해주는 것이다.
+        this.setState(current => ({ count: current.count + 1 }));    
+    };
+
+    minus = () => { 
+        this.setState(current => ({ count: current.count - 1 }));
+    };
+
+    (생략...)
+    ```     
+
+    state는 동적 데이터를 사용할 때 반드시 도입해야 할 요소다. 영화 앱에서 동적 데이터를 다룰 때 state를 자주 사용하니 잘 익혀두도록 하자!
+
+1. 클래스형 컴포넌트의 일생 알아보기
+
+    클래스형 컴포넌트에는 render() 함수 외에도 여러 함수가 있다. 그중에서도 클래스형 컴포넌트의 일생을 만들어 주는 생명주기 함수를 순서대로 알아보자. 생명주기 함수를 이용해서 영화 데이터를 가져와야 하니까 생명주기 함수를 알아야 한다. 
+
+    (1) [constructor() 함수](https://velog.io/@bclef25/React-Lifecycle-2rk4p6wg38) 알아보기
+
+    > constructor() 함수는 생명주기 함수는 아니지만 클래스형 컴포넌트가 생성될 때 호출되므로 설명한다.
+
+    다음과 같이 코드를 작성해보자.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props);
+            console.log('hello');
+        }
+        (생략...)
+        render() {
+            console.log('render');
+            return (
+                <div>
+                    <h1>The number is: {this.state.count}</h1>
+                    <button onClick={this.add}>Add</button>
+                    <button onClick={this.minus}>Minus</button>
+                    </div>
+            );
+        }
+    }
+
+    export default App;
+    ```
+
+    [Console] 탭의 결과를 보면 constructor() 함수에 있는 console.log() 함수가 먼저 실행될 것이다. render() 함수보다 constructor() 함수가 먼저 실행된 것이다.
+
+    ![constructor](./Image/constructor.png)
+
+    > constructor() 함수는 render() 함수보다 먼저 실행되지만 React.Component에 포함된 함수가 아닌 자바스크립트 함수이다.
+
+    (2) [componentDidMount() 함수](https://velog.io/@bclef25/React-Lifecycle-2rk4p6wg38) 알아보기
+
+    componentDidMount() 함수를 작성한 다음, 그 안에 console.log() 함수를 작성하자. 함수를 작성하는 위치는 App 클래스 안이면 어디든 상관없다. 
+
+    ```js
+    (생략...)
+        componentDidMount() {
+            console.log('component rendered');
+        }
+
+    render() {
+        console.log("I'm rendering");
+        return (
+            <div>
+                <h1>The number is: {this.state.count}</h1>
+                <button onClidk={this.add}>Add</button>
+                <button onClick={this.minus}>Minus</button>
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+    ![componentDidMount](./Image/componentDidMount.png)
+
+    [Console] 탭을 보면 render() 함수가 실행된 다음 componentDidMount() 함수가 실행된 것을 알 수 있다. 여기까지 알아본 3가지 함수가 바로 리액트에서 마운트(Mount)로 분류하는 생명주기 함수이다. render() 함수, constructor() 함수, componentDidMount() 함수.
+
+    ![component_rendered](./Image/im_rendering.png)
+
+    
