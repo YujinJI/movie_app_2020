@@ -1346,7 +1346,96 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     이 함수는 실행되지 않을 것이다. 왜냐하면 컴포넌트가 화면에서 떠나게 만드는 코드를 작성하지 않았기 때문이다. componentWillUnmount() 함수는 컴포넌트가 화면에서 떠날 때 실행된다.
 
+1. 영화 앱 만들기 워밍업
+
+    (1) App 컴포넌트 비우기
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        render() {
+            return <div />;
+        }
+    }
+
+    export default App;
+    ```
+
+    (2) 영화 데이터 로딩 상태 표시해 주기
+
+    isLoading state를 추가해 보자. isLoading state는 컴포넌트가 마운트되면 true여야 하니까 다음과 같이 코드를 작성하자.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+        state = {
+            isLoading: true,
+        };
+        render() {
+            return <div />;
+        }
+    }
+    ```
+
+    isLoading state에 따라 '로딩 중이다', '로딩이 다 됐다'와 같은 문장을 화면에 출력해 보자. 구조 분해 할당과 삼항 연산자를 활용해서 로딩 상태를 알려 주는 문장을 출력하도록 만들자.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        isLoading: true,
+    };
+    render() {
+        const { isLoading } = this.state;
+        return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+    }       //isLoading을 삼항 연산자에 활용했다.
+    }
+
+    export default App;
+    ```
+
+    > 삼항 연산자는 isLoading이 true이면 : 왼쪽의 문장을, false이면 : 오른쪽의 문장을 반환해 준다.
+
+    ![Loading](./Image/Loading.png)
+
+    (3) 로딩 현상 구현하기
+
+    setTimeout() 함수는 첫 번째 인자로 전달한 함수를 두 번째 인자로 전달한 값 후에 실행해 준다. 6초 후에 isLoading state를 false로 바꿔보자.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.Component {
+    state = {
+        isLoading: true,
+    };
+    componentDidMount() {
+        setTimeout(() => {
+        this.setState({ isLoading: false });
+        }, 6000);
+    }
+    render() {
+        const { isLoading } = this.state;
+        return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+    }
+    }
+
+    export default App;
+    ```
+
+    앱을 실행시키면 6초 후에 Loading...이라는 문장이 We are ready라는 문장으로 바뀐다.
+
+    ![Loading...](./Image/Loading.png)
     
+    ![Weareready](./Image/We_are_ready.png)
+
+    
+
+
+
     
     
 
