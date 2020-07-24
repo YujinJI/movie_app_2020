@@ -1294,4 +1294,60 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     ![component_rendered](./Image/im_rendering.png)
 
+    (3) componentDidUpdate() 함수 알아보기
+
+    componentDidUpdate() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수의 위치는 App 컴포넌트 안이라면 어디든 괜찮다.
+
+    ```js
+    import React from 'react';
+
+    class App extends React.component {
+        (생략...)
+        componentDidMount() {
+            console.log('component rendered');
+        }
+
+        componentDidUpdate() {
+            console.log('I just updated');
+        }
+        (생략...)
+    ```
+
+    함수 이름에서 짐작할 수 있듯이 이 함수는 화면이 업데이트되면(새로 그려지면) 실행된다. 앞에서 만든 숫자 증감 앱에서는 `<Add> 또는 <Minus>` 버튼을 눌러서 setState() 함수를 실행시키는 경우에 화면이 업데이트 된다. 그래서 `<Add> 또는 <Minus>`버튼을 누르면 I'm rendering 과 I just updated라는 문장이 [Console] 탭에 출력될 것이다. 확인해보자.
+
+    ![componentDidUpdate](./Image/componentDidUpdate.png)
+
+    ![component_rendered](./Image/component_rendered.png)
+
+    `<Add> 또는 <Minus>` 버튼을 누르면 setState() 함수가 실행되고, render() 함수가 다시 실행되니까(화면이 업데이트되니까) componentDidUpdate() 함수가 실행되는 것이다.
+
+    (4) componentWillUnmonut() 함수 알아보기
+
+    componentWillUnmount() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수 역시 App 컴포넌트 안이면 어디에 작성해도 괜찮다.
+
+    ```js
+    (생략...)
+    componentDidMount() {
+        console.log('component rendered');
+    }
+
+    componentDidUpdate() {
+        console.log('I just updated');
+    }
+
+    componentWillUnmount() {
+        console.log('Goodbye, cruel world');
+    }
+    (생략...)
+    ```
+
+    > componentWillUnmount() 함수는 보통 컴포넌트에 적용한 이벤트 리스너를 제거할 때 많이 사용한다.
+
+
+    이 함수는 실행되지 않을 것이다. 왜냐하면 컴포넌트가 화면에서 떠나게 만드는 코드를 작성하지 않았기 때문이다. componentWillUnmount() 함수는 컴포넌트가 화면에서 떠날 때 실행된다.
+
+    
+    
+    
+
     

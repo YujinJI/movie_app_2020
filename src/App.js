@@ -12,12 +12,24 @@ class App extends React.Component {
     console.log('component rendered');
   }
 
+  componentDidUpdate() {
+    console.log('I just updated');
+  }
+
+  componentWillUnmount() {
+    console.log('Goodbye curel world');
+  }
+
   add = () => {   
-    this.setState({ count: 1 });
+    this.setState( current => ({ 
+      count: current.count + 1,
+     }));
   };
 
   minus = () => {
-    this.setState({ count: -1 });
+    this.setState( current => ({
+      count: current.count - 1,
+    }));
   };
 
   render() {
