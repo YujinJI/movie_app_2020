@@ -3,8 +3,10 @@ import React from 'react';
 class App extends React.Component {
   state = {
     isLoading: true,
+    movies: [],
   };
   componentDidMount() {
+    // 영화 데이터 로딩!
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 6000);
