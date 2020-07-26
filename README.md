@@ -1177,7 +1177,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     ![setState](./Image/setState.png)
 
-    > setState() 함수에 새로운 객체를 전달하면 리액트가 자동으로 state에 반영해 줍니다.
+    > setState() 함수에 새로운 객체를 전달하면 리액트가 자동으로 state에 반영해 준다.
 
     (6) 버튼을 누르면 count state의 값을 증가 또는 감소시키기
 
@@ -1297,7 +1297,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (3) componentDidUpdate() 함수 알아보기
 
-    componentDidUpdate() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수의 위치는 App 컴포넌트 안이라면 어디든 괜찮다.
+    componentDidUpdate() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수의 위치는 App 컴포넌트 안이라면 어디든 상관없다.
 
     ```js
     import React from 'react';
@@ -1324,7 +1324,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (4) componentWillUnmonut() 함수 알아보기
 
-    componentWillUnmount() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수 역시 App 컴포넌트 안이면 어디에 작성해도 괜찮다.
+    componentWillUnmount() 함수를 작성한 다음, 그 안에 console.log()를 작성하자. 이 함수 역시 App 컴포넌트 안이면 어디에 작성해도 상관없다.
 
     ```js
     (생략...)
@@ -1473,13 +1473,13 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (1) YTS 영화 데이터 API 살펴보기
 
-    크롬 브라우저 주소 입력 창에 yts.lt/api 라고 입력하면 YTS 영화 데이터 API 사이트에 접속할 수 있다. 여기서 우리는 'List Movies API'라는 기능을 사용할 것이다. `<List Movies>` 를 눌러보자.
+    크롬 브라우저 주소 입력 창에 yts.lt/api 라고 입력하면 YTS 영화 데이터 API 사이트에 접속할 수 있다. 여기서 'List Movies API'라는 기능을 사용할 것이다. `<List Movies>` 를 눌러보자.
 
     ![List_movies](./Image/List_movies.png)
 
     ![Endpoint](./Image/Endpoint.png)
 
-    API는 그림에서 보듯 특정 주소를 입력하면 그 주소에 맞는 결과를 보내 준다. 그리고 추가로 특정 주소에 조건을 붙여 입력하면 그 조건까지 고려한 결과를 보내준다. Endpoint의 가장 위에 있는 주소를 사용하자. 이 주소는 최신 영화 20개에 대한 데이터를 기본으로 보내준다.
+    API는 그림에서 보듯 특정 주소를 입력하면 그 주소에 맞는 결과를 보내 준다. 그리고 추가로 특정 주소에 조건을 붙여 입력하면 그 조건까지 고려한 결과를 보내준다. 
 
     Endpoint의 주소 중 .json으로 끝나는 주소를 입력해 보자.
 
@@ -1497,7 +1497,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     **그런데** YTS에서 영화 토렌트 파일을 업로드 하고 있다. 이것은 **불법**이다. 그러다 보니 매번 접속해야 하는 주소가 변경된다. 그래서 '노마드 코더 영화 API'를 사용하자. 이것은 불법이 아니다.
 
-    노마드 코더 영화 API 깃허브에 접속해 보면 README.md에 간단한 소개 글이 적혀 있을 것이다. How to use를 읽어 보자.
+    노마드 코더 영화 API 깃허브에 접속해 보면 README.md에 간단한 소개 글이 적혀 있다. How to use를 읽어 보자.
     
     ```
     노마드 코더 영화 API 깃허브 주소: github.com/serranoarevalo/yts-proxy
@@ -1574,8 +1574,8 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     }
     (생략...)
     ```
-    사실 async라는 키워드는 자바스크립트에게 getMovies() 함수가 비동기라고 말해주는 것이다. 자바스크립트에게 'getMovies() 함수는 비동기라서 기다려댜 해'라고 자바스크립트에게 'getMovies() 함수 내부의 axios.get()의 실행 완료를 기다렸다가 끝내면 계속 진행해 줘'라고 말한 것이다.
+    
+    getMovies() 함수는 비동기라서 기다려야 하기 때문에, axios.get()의 실행 완료를 기다렸다가 끝내면 계속 진행하기 위해 async 키워드가 자바스크립트에게 전하는 것이다.
     **여기서 집중해야 할 내용은 'API에서 데이터를 받아오는 axios.get()을 실행하려면 시간이 필요하고, 그 사실을 자바스크립트에게 알려야만 데이터를 잡을 수 있으므로 async, await를 사용했다'는 것이다.**
-
     
     
