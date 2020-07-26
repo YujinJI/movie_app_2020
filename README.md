@@ -13,6 +13,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 - [Ch03 - 리액트 기초 개념 알아보기](#ch03)
 - [Ch04 - 슈퍼 똑똑하게 컴포넌트 만들기](#ch04)
 - [Ch05 - state와 클래스형 컴포넌트](#ch05)
+- [Ch06 - 영화 앱 만들기](#ch06)
 
 ---
 
@@ -1457,10 +1458,124 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     export default App;
     ```
 
-    
+<a id="ch06"></a>
+## Ch06 - 영화 앱 만들기
 
+1. 영화 API 사용해 보기
+
+    영화 데이터를 로딩하려면 자바스크립트의 fetch()라는 함수가 필요하지만, fetch() 함수 대신 axios라는 도구를 사용하여 영화 앱을 만들것이다.
+
+    **axios 설치하기**
+    
+    ```
+    > npm install axios
+    ```
+
+    (1) YTS 영화 데이터 API 살펴보기
+
+    크롬 브라우저 주소 입력 창에 yts.lt/api 라고 입력하면 YTS 영화 데이터 API 사이트에 접속할 수 있다. 여기서 우리는 'List Movies API'라는 기능을 사용할 것이다. `<List Movies>` 를 눌러보자.
+
+    ![List_movies](./Image/List_movies.png)
+
+    ![Endpoint](./Image/Endpoint.png)
+
+    API는 그림에서 보듯 특정 주소를 입력하면 그 주소에 맞는 결과를 보내 준다. 그리고 추가로 특정 주소에 조건을 붙여 입력하면 그 조건까지 고려한 결과를 보내준다. Endpoint의 가장 위에 있는 주소를 사용하자. 이 주소는 최신 영화 20개에 대한 데이터를 기본으로 보내준다.
+
+    Endpoint의 주소 중 .json으로 끝나는 주소를 입력해 보자.
+
+    ```
+    Endpoint 주소: yts.mx/api/v2/list_movies.json
+    ```
+
+    그러면 복잡해 보이는 텍스트가 화면에 표시되는 것을 볼 수 있다. 간단하게 자바스크립트의 객체와 비슷한 데이터라고 이해하면 된다. JSON 데이터에 줄바꿈이 없어서 보기가 어렵다. JSON 데이터를 좀 더 편하게 보기 위해 크롬 브라우저의 'JSON Viewer'라는 확장 도구를 설치하면 된다.
+
+    JSON Viewer을 설치한 다음 접속했던 주소로 다시 접속하면 JSON의 형태가 깔끔하게 출력될 것이다.
+
+    ![JSON_Viewer](./Image/json_viewer2.png)
+
+    > movie 키값을 보면 title, year와 같은 값이 보인다. 이것이 영화 데이터이다.
+
+    **그런데** YTS에서 영화 토렌트 파일을 업로드 하고 있다. 이것은 **불법**이다. 그러다 보니 매번 접속해야 하는 주소가 변경된다. 그래서 '노마드 코더 영화 API'를 사용하자. 이것은 불법이 아니다.
+
+    노마드 코더 영화 API 깃허브에 접속해 보면 README.md에 간단한 소개 글이 적혀 있을 것이다. How to use를 읽어 보자.
+    
+    ```
+    노마드 코더 영화 API 깃허브 주소: github.com/serranoarevalo/yts-proxy
+    ```
+
+    **YTS의 endpoint /list_movies.json을 쓰려면 yts-proxy.now.sh에 /list_movies.json을 붙이면 된다**고 설명하고 있다. 
+    
+    (2) 노마드 코더 영화 API를 영화 앱에서 호출하기
+
+    ```js
+    import React from 'react';
+    import axios from 'axios';
+
+    class App extends React.Component {
+    state = {
+        isLoading: true,
+        movies: [],
+    };
+    componentDidMount() {
+        // axios로 API를 호출
+        axios.get('http://yts-proxy.now.sh/list_movies.json');
+    }
+    render() {
+        const { isLoading } = this.state;
+        return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+    }
+    }
+
+    export default App;
+    ```
+    
+    영화 앱을 실행해 보면 여전히 Loading...이라고만 나올 것이다. 하지만 중요한 것은 axios가 오류가 발생하지 않았기 때문에 동작하고 있다는 것이다. 즉, axios는 API에 영화 데이터를 요청하고 있다. 하지만, axios는 네트워크를 사용하므로 느리게 동작한다. 그래서 axios.get()이 반환한 영화 데이터를 잡으려면 자바스크립트에게 axios.get()을 포함하고 있는 함수의 실행이 끝날 때까지 시간이 걸릴 수 있다고 말해야 한다. 그러니 axios.get()의 실행이 분리될 수 있도록 새 함수를 만들자.
+
+    (3) getMovies() 함수 기다린 다음, axios.get() 함수가 반환한 데이터 잡기
+
+    getMovies() 함수를 만들고, 그 함수 안에서 axios.get()이 실행되도록 만들자. 
+
+    ```js
+    import React from 'react';
+    import axios from 'axios';
+
+    class App extends React.Component {
+    state = {
+        isLoading: true,
+        movies: [],
+    };
+    getMovies = () => {
+        const movies = axios.get("https://yts-proxy.now.sh/list_movies.json");
+    }
+    componentDidMount() {
+        this.getMovies();
+    }
+    render() {
+        const { isLoading } = this.state;
+        return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+    }
+    }
+
+    export default App;
+    ```
+
+    이제 componentDidMount() 함수가 실행되면 this.getMovies()가 실행될 것이다. **이때 자바스크립트에게 'getMovies() 함수는 시간이 좀 필요하다'라고** 말해야만 axios.get()이 반환한 데이터를 제대로 잡을 수 있다. 그렇게 하려면 [async,await](https://ko.javascript.info/async-await) 두가지의 키워드가 필요하다.
+
+    (4) getMovies()에 async 붙이고, axios.get()에 await 붙이기
+
+    자바스크립트에서 'getMovies() 함수는 시간이 필요해'라고 말하려면 async를 ()앞에 붙이고 실제 시간이 필요한 대상인 axios.get() 앞에 await를 붙이면 된다. 
+
+    ```js
+    (생략...)
+      getMovies = async () => {
+        // 자바스크립트에게 getMovie() 함수는 시간이 필요하고
+        const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+        // axios.get()의 실행을 기다려 달라고 말해주는 것이다.
+    }
+    (생략...)
+    ```
+    사실 async라는 키워드는 자바스크립트에게 getMovies() 함수가 비동기라고 말해주는 것이다. 자바스크립트에게 'getMovies() 함수는 비동기라서 기다려댜 해'라고 자바스크립트에게 'getMovies() 함수 내부의 axios.get()의 실행 완료를 기다렸다가 끝내면 계속 진행해 줘'라고 말한 것이다.
+    **여기서 집중해야 할 내용은 'API에서 데이터를 받아오는 axios.get()을 실행하려면 시간이 필요하고, 그 사실을 자바스크립트에게 알려야만 데이터를 잡을 수 있으므로 async, await를 사용했다'는 것이다.**
 
     
-    
-
     
