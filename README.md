@@ -1465,17 +1465,15 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     영화 데이터를 로딩하려면 자바스크립트의 fetch()라는 함수가 필요하지만, fetch() 함수 대신 axios라는 도구를 사용하여 영화 앱을 만들것이다.
 
-    **axios 설치하기**
+    **[axios](https://joshua1988.github.io/vue-camp/vue/axios.html#%EC%95%A1%EC%8B%9C%EC%98%A4%EC%8A%A4-%EC%84%A4%EC%B9%98) 설치하기**
+    
+    > axios는 HTTP 통신 라이브러리이다.
     
     ```
     > npm install axios
     ```
 
     (1) YTS 영화 데이터 API 살펴보기
-
-    크롬 브라우저 주소 입력 창에 yts.lt/api 라고 입력하면 YTS 영화 데이터 API 사이트에 접속할 수 있다. 여기서 'List Movies API'라는 기능을 사용할 것이다. `<List Movies>` 를 눌러보자.
-
-    ![List_movies](./Image/List_movies.png)
 
     ![Endpoint](./Image/Endpoint.png)
 
@@ -1487,23 +1485,17 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     Endpoint 주소: yts.mx/api/v2/list_movies.json
     ```
 
-    그러면 복잡해 보이는 텍스트가 화면에 표시되는 것을 볼 수 있다. 간단하게 자바스크립트의 객체와 비슷한 데이터라고 이해하면 된다. JSON 데이터에 줄바꿈이 없어서 보기가 어렵다. JSON 데이터를 좀 더 편하게 보기 위해 크롬 브라우저의 'JSON Viewer'라는 확장 도구를 설치하면 된다.
-
-    JSON Viewer을 설치한 다음 접속했던 주소로 다시 접속하면 JSON의 형태가 깔끔하게 출력될 것이다.
+    JSON Viewer을 설치한 다음 접속했던 주소로 접속하면 JSON의 형태가 깔끔하게 출력될 것이다.
 
     ![JSON_Viewer](./Image/json_viewer2.png)
 
     > movie 키값을 보면 title, year와 같은 값이 보인다. 이것이 영화 데이터이다.
 
     **그런데** YTS에서 영화 토렌트 파일을 업로드 하고 있다. 이것은 **불법**이다. 그러다 보니 매번 접속해야 하는 주소가 변경된다. 그래서 '노마드 코더 영화 API'를 사용하자. 이것은 불법이 아니다.
-
-    노마드 코더 영화 API 깃허브에 접속해 보면 README.md에 간단한 소개 글이 적혀 있다. How to use를 읽어 보자.
     
     ```
     노마드 코더 영화 API 깃허브 주소: github.com/serranoarevalo/yts-proxy
     ```
-
-    **YTS의 endpoint /list_movies.json을 쓰려면 yts-proxy.now.sh에 /list_movies.json을 붙이면 된다**고 설명하고 있다. 
     
     (2) 노마드 코더 영화 API를 영화 앱에서 호출하기
 
@@ -1529,7 +1521,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     export default App;
     ```
     
-    영화 앱을 실행해 보면 여전히 Loading...이라고만 나올 것이다. 하지만 중요한 것은 axios가 오류가 발생하지 않았기 때문에 동작하고 있다는 것이다. 즉, axios는 API에 영화 데이터를 요청하고 있다. 하지만, axios는 네트워크를 사용하므로 느리게 동작한다. 그래서 axios.get()이 반환한 영화 데이터를 잡으려면 자바스크립트에게 axios.get()을 포함하고 있는 함수의 실행이 끝날 때까지 시간이 걸릴 수 있다고 말해야 한다. 그러니 axios.get()의 실행이 분리될 수 있도록 새 함수를 만들자.
+    위 코드를 실행하면 Loading...이라고 나올 것이다. 하지만 중요한 것은 axios가 오류가 발생하지 않았기 때문에 동작하고 있다는 것이다. 즉, axios는 API에 영화 데이터를 요청하고 있다. 하지만, axios는 **네트워크를 사용하므로 느리게 동작한다.** 그래서 axios.get()이 반환한 영화 데이터를 잡으려면 자바스크립트에게 axios.get()을 포함하고 있는 함수의 실행이 끝날 때까지 시간이 걸릴 수 있다고 말해야 한다. 
 
     (3) getMovies() 함수 기다린 다음, axios.get() 함수가 반환한 데이터 잡기
 
@@ -1559,9 +1551,9 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     export default App;
     ```
 
-    이제 componentDidMount() 함수가 실행되면 this.getMovies()가 실행될 것이다. **이때 자바스크립트에게 'getMovies() 함수는 시간이 좀 필요하다'라고** 말해야만 axios.get()이 반환한 데이터를 제대로 잡을 수 있다. 그렇게 하려면 [async,await](https://ko.javascript.info/async-await) 두가지의 키워드가 필요하다.
+    이제 componentDidMount() 함수가 실행되면 this.getMovies()가 실행될 것이다. 
 
-    (4) getMovies()에 async 붙이고, axios.get()에 await 붙이기
+    (4) getMovies()에 [async](https://ko.javascript.info/async-await) 붙이고, axios.get()에 [await](https://ko.javascript.info/async-await)붙이기
 
     자바스크립트에서 'getMovies() 함수는 시간이 필요해'라고 말하려면 async를 ()앞에 붙이고 실제 시간이 필요한 대상인 axios.get() 앞에 await를 붙이면 된다. 
 
@@ -1578,4 +1570,285 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     getMovies() 함수는 비동기라서 기다려야 하기 때문에, axios.get()의 실행 완료를 기다렸다가 끝내면 계속 진행하기 위해 async 키워드가 자바스크립트에게 전하는 것이다.
     **여기서 집중해야 할 내용은 'API에서 데이터를 받아오는 axios.get()을 실행하려면 시간이 필요하고, 그 사실을 자바스크립트에게 알려야만 데이터를 잡을 수 있으므로 async, await를 사용했다'는 것이다.**
     
+1. 영화 데이터 화면에 그리기
+
+    (1) 구조 분해 할당을 이용하여 movies에 접근하기
+
+    axios를 통해 받은 데이터를 `console.log()`를 통해 출력
+
+    ```js
+    (생략...)
+      getMovies = async () => {
+        const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+        console.log(movies.data.data.movies);
+    }
+    (생략...)
+    ```
+
+    ![movies.data.data.movies](./Image/data_console.png)
+
+    위 코드에서 구조 분해 할당을 이용하여 코드를 간소화 시킬 수 있다.
+
+    ```js
+    (생략...)
+      getMovies = async () => {
+        const {
+            data : {
+                data : { movies },
+            },
+        } = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+
+        console.log(movies);
+    }
+    (생략...)
+    ```
     
+    이전의 코드와 실행 결과는 동일하다.
+
+    (2) movies state에 영화 데이터 저장하기
+
+    ```js
+    class App extends React.Component {
+        state = {
+            isLoading: true,
+            movies: [],  // this.state.movies
+        };  
+        getMovies = async () => {
+            const {
+                data : {
+                   data : { movies },
+                },
+            } = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+
+            // state.movies 를 위에서 구조분해 할당한 변수로 바꾼다
+            this.setState({ movies : movies });
+        };
+        componentDidMount() {
+            this.getMovies();
+        }
+        render() {
+            const { isLoading } = this.state;
+            return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+        }
+    }
+    ```
+
+    `setState()` 함수를 활용하여 `state.movies` 배열에 axios로 받은 결과를 저장한다. 이때 조심해야 할 점은 `state.movies`와 axios로 받은 `movies`를 헷갈리면 안된다.
+
+    또한, ES6에서 객체의 키와 대입할 변수의 이름이 같다면 코드를 아래와 같이 축약할 수 있다.
+
+    ```js
+    // this.setState({ movies : movies });
+    this.setState({ movies });
+    ```
+
+    (3) isLoading state를 true에서 false로 업데이트
+
+    axios가 네트워크에서 하던 작업이 완료되면, 데이터의 로딩이 끝난것이기 때문에 isLoading state를 false로 바꿔준다.
+
+    ```js
+    (생략...)
+    getMovies = async () => {
+        const {
+            data : {
+                data : { movies },
+            },
+        } = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+        
+        // movies 뿐만 아니라 isLoading도 변경 
+        this.setState({ movies, isLoading : false });
+    };
+    ```
+
+    ![Loading..](./Image/Loading.png)
+
+    ![we_are_ready](./Image/We_are_ready.png)
+
+    axios가 네트워크 작업을 마치고 나면, We are ready가 출력되는것을 확인할 수 있다.
+
+1. Movie 컴포넌트 만들기
+
+    (1) 영화 데이터를 그리기 위한 Movie 컴포넌트
+
+    src 폴더에 Movie.js 파일을 새로 만든다.
+
+    ```js
+    import React from 'react';
+    import PropType from 'prop-types';
+
+    // state가 필요하지 않으므로 class가 아닌 function
+    function Movie() {
+        return <h1></h1>;
+    }
+
+    // Movie에 넘어와야 하는 영화 데이터를 정의하기 위해 propTypes 사용
+    Movie.propTypes = {};
+
+    export default Movie;
+    ```
+
+    (2) 영화 데이터에서 필요한 데이터를 골라서 propTypes에 추가
+
+    movies 배열에서 각 원소 하나가 가지는 영화데이터는 아래와 같다.
+
+    ```json
+    {
+        "id": 15553,
+        (생략...)
+        "title": "Doctor Who The Day of the Doctor",
+        (생략...)
+        "year": 2013,
+        (생략...)
+        "summary": "In 2013, something terrible is awakening in London's National Gallery; in 1562, a murderous plot is afoot in Elizabethan England; and somewhere in space an ancient battle reaches its devastating conclusion.",
+        (생략...)
+        "medium_cover_image": "https://yts.mx/assets/images/movies/doctor_who_the_day_of_the_doctor_2013/medium-cover.jpg",
+        (생략...)
+    }
+    ```
+    위 데이터에서 medium_cover_image를 poster값으로 받을 것이기 때문에, propTypes에 string으로 정의한다.
+
+    ```js
+    (생략...)
+    Movie.propTypes = {
+        id : PropTypes.number.isRequired,
+        year : PropTypes.number.isRequired,
+        title : PropTypes.string.isRequired,
+        summary : PropTypes.string.isRequired,
+        poster : PropTypes.string.isRequired,
+    };
+    (생략...)
+    ```
+
+    (3) API GET parmeter를 활용하여 데이터 정렬하기
+
+    ![endpoint_parameter](./Image/endpoint_params.png)
+
+    API URL에 `sort_by` 매개변수를 추가하여, 특정 키 값으로 정렬된 데이터를 받을 수 있다. 이를 활용하여, rating 값으로 정렬된 데이터를 얻기 위한 URL은 다음과 같다.
+
+    ```
+    yts-proxy.now.sh/list_movies.json?sort_by=rating
+    ```
+
+    ```json
+    {
+        "status": "ok",
+        "status_message": "Query was successful",
+        "data": {
+            "movie_count": 19318,
+            "limit": 20,
+            "page_number": 1,
+            "movies": [
+                {
+                    "id": 15553,
+                    (생략...)
+                    "rating": 9.4,
+                    (생략...)
+                },
+                {
+                    "id": 3709,
+                    (생략...)
+                    "rating": 9.3,
+                    (생략...)
+                },
+                {
+                    "id": 3304,
+                    (생략...)
+                    "rating": 9.2,
+                    (생략...)
+                },
+                (생략...)
+            ]
+            (생략...)
+        }
+        (생략...)
+    }
+    ```
+
+    URL에 접속하면 위와 같이 rating 순으로 정렬된 데이터를 확인할 수 있다. 이제 `App.js`에서 `axios.get()`에 새로운 URL을 전달한다.
+
+    ```js
+    (생략...)
+    getMovies = async () => {
+        const {
+            data : {
+                data : { movies },
+            },
+        } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+        
+        this.setState({ movies, isLoading : false });
+    };
+    (생략...)
+    ```
+
+    (4) Movie 컴포넌트에 props 추가
+
+    Movie 컴포넌트가 전달받은 데이터를 그릴 수 있도록 props를 추가한다.
+
+    ```js
+    function Movie({ id, title, year, summary, poster }) {
+        return <h1>{title}</h1>;
+    }
+    ```
+
+    이제 `App.js`에서 Movie 컴포넌트에 props를 전달할 수 있다.
+
+    (5) Movie 컴포넌트에 props 전달
+
+    `Movie` 컴포넌트를 사용하기위해 import를 추가하고, `render()` 메소드에서 API 데이터가 저장된 `this.state.movies`를 구조분해할당을 통해 정의한다.
+
+    ```js
+    import React from 'react';
+    import axios from 'axios';
+    import Movie from './Movie';  // Movie 컴포넌트를 사용하기 위해 import
+
+    class App extends React.Component {
+        state = {
+            isLoading: true,
+            movies: [],
+        };  
+        getMovies = async () => {
+            const {
+                data : {
+                    data : { movies },
+                },
+            } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+            this.setState({ movies, isLoading: false });
+        };
+        componentDidMount() {
+            this.getMovies();
+        }
+        render() {
+            // this.state에서 movies 할당
+            const { isLoading, movies } = this.state;
+            return (
+                <div>
+                    {isLoading 
+                    ? 'Loading...'
+                    // map을 사용하여, 모든 movies 원소에 대해 컴포넌트를 그린다.
+                    : movies.map((movie) => {
+                        console.log(movie);
+                        return (
+                            <Movie
+                                key={movie.id}
+                                id={movie.id}
+                                year={movie.year}
+                                title={movie.title}
+                                summary={movie.summary}
+                                poster={movie.medium_cover_image}
+                            />
+                        );
+                    })
+                    }
+                </div>
+            );
+        }
+    }
+
+    export default App;
+    ```
+
+    위 코드에서 `movies.map()` 을 사용하여, 모든 배열 원소에 대해 접근하여, `Movie` 컴포넌트들이 필요로 하는 props 를 전달한다. 이 때, 컴포넌트를 여러 개 출력할 때, 유일한 값으로 key props를 추가해야하는데, 데이터에서 id 값은 유일하므로, id 값을 key props로 해도 무방하다.
+
+    ![titles](./Image/titles.png)
+
+    `Movie.js` 에서 `<h1>{title}</h1>`을 그리고 있으므로, 결과는 배열에 대해 모든 title이 출력되는것을 확인할 수 있다.
