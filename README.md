@@ -1852,3 +1852,100 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     ![titles](./Image/titles.png)
 
     `Movie.js` 에서 `<h1>{title}</h1>`을 그리고 있으므로, 결과는 배열에 대해 모든 title이 출력되는것을 확인할 수 있다.
+
+1. 영화 앱 스타일링 하기 - 기초
+
+    (1) App 컴포넌트에 HTML 추가하기
+
+    ```js
+    (생략...)
+    render() {
+        const { isLoading, movies } = this.state;
+        return (
+            // JSX의 가장 바깥쪽은 section 엘리먼트로 감싼다
+            <section class="container">
+                {isLoading ? (
+                // 아래는 Loading...을 위한 것이다
+                <div class="loader">
+                    <span class="loader__text">Loading...</span>
+                </div>
+                ) : (
+                    // Movie 컴포넌트들은 이 엘리먼트로 감싼다
+                    <div class="movies">
+                    {movies.map(movie => (
+                        <Movie
+                        id={movie.id}
+                        year={movie.year}
+                        title={movie.title}
+                        summary={movie.summary}
+                        poster={movie.medium_cover_image}
+                    />
+                    ))}
+                    </div>
+                )}
+            </section>
+        );
+    }
+    (생략...)
+    ```
+
+    (2) Movie 컴포넌트에 HTML 추가하기
+
+    ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+
+    function Movie({ id, title, year, summary, poster }) {
+        return (
+            <div class="movie">
+                <img src={poster} alt={title} title={title} />
+                <div class="movie__data">
+                    <h3 class="movie__title">{title}</h3>
+                    <h5 class="movie__year">{year}</h5>
+                    <p class="movie__summary">{summary}</p>
+                </div>
+            </div>
+        );
+    }
+
+    Movie.propTypes = {
+        id : PropTypes.number.isRequired,
+        year : PropTypes.number.isRequired,
+        title : PropTypes.string.isRequired,
+        summary : PropTypes.string.isRequired,
+        poster : PropTypes.string.isRequired,
+    };
+
+    export default Movie;
+    ```
+
+    위 코드를 실행해 보면 title, year, summary, poster 정복가 각각 다른 스타일로 출력되고 있는것을 알 수 있다. 영화 포스터 이미지에 마우스 커서를 올리면 alt 속성값이 나타난다.
+
+    그런데, 코드를 완성하니 Movie 컴포넌트에서는 id props릂 사용하지 않아서 흐리게 표시되어 있다. `Movie.js`파일에서 id porps를 지우면 된다.
+
+    (3) CSS 파일 생성하고 App, Movie 컴포넌트에 임포트하기
+
+    src 폴더에 Movie.css, App.css 파일을 만든다
+
+    ![css](./Image/css.png)
+
+     ```js
+    import React from 'react';
+    import axios from 'axios';
+    import Movie from './Movie';
+    // App 컴포넌트에 App.css를 임포트
+    import './App.css';
+     ```
+
+     ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+    // Movie 컴포넌트에 Movie.css 임포트
+    import './Movie.css';
+     ```
+
+    
+
+
+
+
