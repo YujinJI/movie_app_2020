@@ -1857,6 +1857,9 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (1) App 컴포넌트에 HTML 추가하기
 
+    
+    `<section>, <div>, <span>` 등.. [태그](http://tcpschool.com/html-tags/section)를 사용한다.
+
     ```js
     (생략...)
     render() {
