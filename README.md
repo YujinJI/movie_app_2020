@@ -14,6 +14,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 - [Ch04 - 슈퍼 똑똑하게 컴포넌트 만들기](#ch04)
 - [Ch05 - state와 클래스형 컴포넌트](#ch05)
 - [Ch06 - 영화 앱 만들기](#ch06)
+- [Ch07 - 영화 앱 다듬기](#ch07)
 
 ---
 
@@ -1922,7 +1923,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     export default Movie;
     ```
 
-    위 코드를 실행해 보면 title, year, summary, poster 정복가 각각 다른 스타일로 출력되고 있는것을 알 수 있다. 영화 포스터 이미지에 마우스 커서를 올리면 alt 속성값이 나타난다.
+    위 코드를 실행해 보면 title, year, summary, poster 정보가 각각 다른 스타일로 출력되고 있는것을 알 수 있다. 영화 포스터 이미지에 마우스 커서를 올리면 alt 속성값이 나타난다.
 
     그런데, 코드를 완성하니 Movie 컴포넌트에서는 id props를 사용하지 않아서 흐리게 표시되어 있다. `Movie.js`파일에서 id props를 지우면 된다.
 
@@ -1947,8 +1948,157 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     import './Movie.css';
      ```
 
+<a id="ch07"></a>
+## Ch07 - 영화 앱 다듬기
 
+1. 영화 앱 전체 모습 수정하기
 
+    화면에 보여줄 영화 정보들
+    
+    1) 영화 포스터 이미지
+    1) 제목
+    1) 개봉 연도
+    1) 장르
+    1) 등급
+    1) 시놉시스 (영화 줄거리)
 
+    여기서 아직 추가하지 않은 영화 데이터는 '장르'이다. 노마드 코더 영화 API에서 장르 키가 무엇인지 살펴본다.
 
+    ![genres](./Image/genres.png)
+
+    여기서 genres키가 장르 키다.
+
+    (1) Movie 컴포넌트에 genres props 넘겨주기
+
+    ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+    import './Movie.css';
+    
+    // genres props 추가
+    function Movie({ title, year, summary, poster, genres }) {
+        return (
+            <div class="movie">
+                <img src={poster} alt={title} title={title} />
+                <div class="movie__data">
+                    <h3 class="movie__title">{title}</h3>
+                    <h5 class="movie__year">{year}</h5>
+                    <p class="movie__summary">{summary}</p>
+                </div>
+            </div>
+        );
+    }
+
+    Movie.propTypes = {
+        year : PropTypes.number.isRequired,
+        title : PropTypes.string.isRequired,
+        summary : PropTypes.string.isRequired,
+        poster : PropTypes.string.isRequired,
+        // genres의 prop-type 추가
+        genres : PropTypes.arrayOf(PropTypes.string).isRequired,
+    };
+
+    export default Movie;
+    ```
+
+    > arrayOf(PropTypes.string)은 문자열을 원소로 하는 배열을 의미합니다.
+
+    위 코드를 작성하면 genres가 undefined인 상태가 된다. App 컴포넌트에서 Movie 컴포넌트로 genres props를 전달하면 된다.
+
+    (2) App 컴포넌트 수정하기
+
+    ```js
+    ...
+    <div class="movies">
+        {movies.map(movie => (
+            <Movie
+            id={movie.id}
+            year={movie.year}
+            title={movie.title}
+            summary={movie.summary}
+            poster={movie.medium_cover_image}
+            genres={movie.genres}
+            />
+        ))}
+    </div>
+    ...
+    ```
+
+    (3) class 속성 이름 className으로 바꿔 주기
+
+    HTML에서는 class라고 사용하지만, 리액트에서는 class가 아닌 className으로 수정해야 한다. HTML의 class와 자바스크립트의 class라는 이름이 겹치면 리액트가 혼란스러울 수 있으므로 하나는 다른 이름을 써야 한다.
+    
+    > 리액트는 JSX를 HTML로 변환하면서 className을 class로 다시 바꿔 준다.
+
+    `App.js` 파일과 `Movie.js` 파일에서 class 라고 되어있는것을 className으로 전부 바꿔준다.
+
+    (4) 영화 장르 출력하기
+
+    genres props가 배열이므로 map() 함수를 사용한다. 
+
+    ```js
+    ...
+    function Movie({ title, year, summary, poster, genres }) {
+        return (
+            <div className="movie">
+                <img src={poster} alt={title} title={title} />
+                <div className="movie__data">
+                    <h3 className="movie__title">{title}</h3>
+                    <h5 className="movie__year">{year}</h5>
+                    <ul className="movie__genres">
+                        {genres.map((genre) => {
+                            return <li className="movie__genre">{genres}</li>;
+                        })}
+                    </ul>
+                    <p className="movie__summary">{summary}</p>
+                </div>
+            </div>
+        );
+    }
+    ...
+    ```
+
+    ![genre](./Image/genre.png)
+
+    ![key_error](./Image/key_error.png)
+
+    장르는 정상적으로 잘 출력된다. 하지만 [Console] 탭을 보면 경고 메시지가 있다. 장르를 출력할 때 사용한 li 엘리먼트에 key props를 추가하지 않아서 나타난 경고이다. 그런데 장르는 API에서 id와 같은 값을 매겨 주지 않았다. 이런 경우 map() 함수에 전달할 함수에 두 번째 인자를 전달하면 된다. map() 함수에 전달할 함수의 2번째 인자에는 map() 함수가 반복 실행하며 반환할 배열 원소의 인덱스가 자동으로 들어온다. 이 값을 이용하여 key props를 추가한다.
+
+    (5) li 엘리먼트에 key props 추가하기
+
+    보통 map() 함수의 2번째 인자 이름은 index라고 지어 준다.
+
+    ```js
+    ...
+    <ul className="movie__genres">
+        {genres.map((genre, index) => {
+            return <li key={index} className="movie__genre">{genre}</li>;
+        })}
+    </ul>
+    ...
+    ```
+
+1. 영화 앱 멋지게 스타일링하기
+
+    (1) App.css 파일 수정하기
+
+    ```js
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: '배달의민족 주아';
+        background-color: #eff3f7;
+        height: 100%;    
+    }
+    ```
+
+    ![css1](./Image/css1.png)
+
+    흰 바탕이 회색 바탕으로 바뀐 것을 알 수 있다. 영화 카드 모양은 Movie.css 파일을 수정해야 적용된다.
+
+    (2) Movie.css 파일 수정하기
 
