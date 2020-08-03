@@ -1720,7 +1720,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
     (생략...)
     ```
 
-    (3) API GET parmeter를 활용하여 데이터 정렬하기
+    (3) API GET parameter를 활용하여 데이터 정렬하기
 
     ![endpoint_parameter](./Image/endpoint_params.png)
 
@@ -1795,7 +1795,7 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (5) Movie 컴포넌트에 props 전달
 
-    `Movie` 컴포넌트를 사용하기위해 import를 추가하고, `render()` 메소드에서 API 데이터가 저장된 `this.state.movies`를 구조분해할당을 통해 정의한다.
+    `Movie` 컴포넌트를 사용하기위해 import를 추가하고, `render()` 메소드에서 API 데이터가 저장된 `this.state.movies`를 구조 분해 할당을 통해 정의한다.
 
     ```js
     import React from 'react';
@@ -2184,4 +2184,3 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     ![title](./Image/title.png)
 
-    
