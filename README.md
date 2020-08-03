@@ -2102,3 +2102,86 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     (2) Movie.css 파일 수정하기
 
+    ```js
+    .movies .movie {
+        background-color: white;
+        margin-bottom: 70px;
+        font-weight: 300;
+        padding: 20px;
+        border-radius: 5px;
+        color: #adaeb9;
+        box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
+    }
+
+    .movies .movie a {
+        display: grid;
+        grid-template-columns: minmax(150px, 1fr) 2fr;
+        grid-gap: 20px;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .movie img {
+        position: relative;
+        top: -50px;
+        max-width: 150px;
+        width: 100%;
+        margin-right: 30px;
+        box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3), 0 -12px 36px -8px rgba(0, 0, 0, 0.025);
+    }
+
+    .movie .movie__title {
+        margin-bottom: 5px;
+        font-size: 24px;
+        color: #2c2c2c;
+    }
+
+    .movie .movie__genres {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 5px 0px;
+    }
+
+    .movie__genres li,
+    .movie .movie__year {
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+    ```
+
+    [`position: relative;`에 대한 내용](https://developer.mozilla.org/ko/docs/Web/CSS/position)
+
+    [`box-shadow`에 대한 내용](https://www.codingfactory.net/10628)
+
+    [`flex, grid`에 대한 내용](https://studiomeal.com/archives/533)
+
+    ![movie_css](./Image/css2.png)
+
+    위 코드를 실행시키면 브라우저의 폭이 넓거나 좁아지는 것에 맞춰 영화 카드의 크기가 달라지는 것을 확인할 수 있다.
+
+    (3) 시놉시스 180자로 제한하기
+
+    시놉시스는 summary props에 저장되어 있는 문자열을 출력한 것이다. summary props에 있는 문자열을 180자로 제한하려면 slice() 함수를 사용하면 된다. [문자열].slice(시작, 끝)와 같이 사용하면 된다.
+
+    ```js
+    ...
+    <p className="movie__summary">{summary.slice(0, 180)}...</p>
+    ...
+    // ...은 자바스크립트 문법이 아닌 텍스트이다.
+    ```
+
+    (4) 영화 앱 제목 바꾸기
+
+    `index.html` 파일에 있는 title 엘리먼트 내용을 수정하면 된다.
+
+    ```html
+    <title>Movie App</title>
+    ```
+
+    ![title](./Image/title.png)
+
+    
