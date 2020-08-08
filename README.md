@@ -2188,5 +2188,69 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 <a id="ch08"></a>
 ## Ch08 - 영화 앱에 여러 기능 추가하기
 
+1. react-router-dom 설치하고 프로젝트 폴더 정리하기
 
+    영화 앱 화면에서 화면을 이동하려면 화면을 이동시켜주는 장치가 필요하다. 화면을 이동시키기 위해 라우터를 사용한다. 라우터는 react-router-dom 패키지를 이용하면 쉽게 도입할 수 있다.
 
+    react-router-dom 설치
+
+    ```
+    > npm install react-router-dom
+    ```
+
+    앞으로 나타날 Home.js 파일은 영화 앱 화면, About.js 파일은 개발자 소개 화면이다. Home.js 파일에 App.js에서 작성한 코드를 그대로 복사하면 된다. 복사 후 클래스 이름을 App에서 Home으로 바꿔주어야 한다. Home.css 파일을 만들어 Home.js에서 Home.css를 임포트하면 된다.
+
+    Home.css 파일에 작성할 코드는 아래와 같다.
+
+    ```css
+    .container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    }
+
+    .loader {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 300;
+    }
+
+    .movies {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(400px, 1fr));
+        grid-gap: 100px;
+        padding: 50px;
+        width: 80%;
+        padding-top: 70px;
+    }
+
+    @media screen and (max-width: 1090px) {
+        .movies {
+            grid-template-columns: 1fr;
+            width: 100%;
+        }
+    }
+    ```
+
+    App.js 파일에 작성할 코드는 아래와 같다.
+
+    ```js
+    import React from 'react';
+    import Home from './routes/Home';
+    import './App.css';
+
+    function App () {
+    return <Home />;
+    }
+
+    export default App;
+    ```
+
+    실행 결과 화면은 다음과 같다.
+
+    ![Home_css](./Image/Home_css.png)
+
+    브라우저 폭에 맞게 영화 카드의 크기가 조절되고, 포스터 이미지가 전의 실행화면과 다르게 잘리지 않는것을 확인 할 수 있다.
