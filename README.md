@@ -2257,6 +2257,170 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
 1. 라우터 만들어 보기
 
-    라우터는 사용자가 입력한 URL을 통해 특정 컴포넌트를 불러준다. 예를 들어 사용자가 localhost:3000/home 이라고 입력하면 Home 컴포넌트를, localhost:3000/about 이라고 입력하면 About 컴포넌트를 불러주는 것이 라우터의 역할이다. 
+    라우터는 사용자가 입력한 URL을 통해 특정 컴포넌트를 불러준다. 예를 들어 사용자가 localhost:3000/home 이라고 입력하면 Home 컴포넌트를, localhost:3000/about 이라고 입력하면 About 컴포넌트를 불러주는 것이 라우터의 역할이다. react-route-dom은 여러 종류의 라우터를 제공한다. 여기서는 HashRouter와 Route 컴포넌트를 사용한다.
+
+    [리액트 라우터에 대해 궁금하다면](https://okayoon.tistory.com/entry/React-%EA%B8%B0%EC%B4%88-%ED%95%99%EC%8A%B5-19%EB%A6%AC%EC%95%A1%ED%8A%B8%EB%9D%BC%EC%9A%B0%ED%84%B0browserRouterhashRouterRouterswitchexactZerocho%EB%8B%98-%EA%B0%95%EC%9D%98-%ED%95%99%EC%8A%B5-%EC%9D%98%EC%8B%9D%EC%9D%98-%ED%9D%90%EB%A6%84%EB%8C%80%EB%A1%9C-%EB%85%B8%ED%8A%B8-%EC%A0%95%EB%A6%AC)
 
     (1) HashRouter와 Route 컴포넌트 사용하기
+
+    HashRouter
+    
+    - 주소에 해쉬(#)가 붙는다. ex) localhost:3000/#/주소
+    - #뒤에는 화면에서 읽는 경로이기 때문에 새로 고침해도 그대로 나온다.
+    - 검색엔진으로는 못읽는 단점때문에 거의 사용하지 않는다.
+    
+    아래와 같이 App.js 파일을 수정해 보자
+
+    ```js
+    import React from 'react';
+    import './App.css';
+    import { HashRouter, Route } from 'react-router-dom';
+    // HashRouter와 Route 컴포넌트를 임포트
+
+    function App () {
+    return (
+        <HashRouter>
+        <Route />
+        </HashRouter>
+        // HashRouter가 Route 컴포넌트를 감싸 반환
+    );  
+    }
+
+    export default App;
+    ```
+
+    Route에 전달할 수 있는 2가지 props
+
+    - URL을 위한 path props
+    - URL에 맞는 컴포넌트를 불러 주기 위한 component props
+
+    (2) Route 컴포넌트에 path, component props 추가하기
+
+    ```js
+    ...
+    import About from './routes/About';
+
+    ...
+
+        <Route path="/about" component={About} />
+    ...
+    ```
+
+    About.js 파일은 아래와 같이 작성해준다.
+
+    ```js
+    import React from 'react';
+
+    function About() {
+        return <span>About this page: I built it because I love movies.</span>;
+    }
+
+    export default About;
+    ```
+
+    여기까지 HashRouter에 Route를 넣었고, Route가 About 컴포넌트를 불러오도록 만들었다.
+
+    localhost:3000/#에 path props로 지정했던 값 /about을 붙여서 접속하면 About 컴포넌트에 작성했던 내용이 나온다.
+
+    ![about](./Image/about.png)
+
+    (3) Home 컴포넌트를 위한 Route 컴포넌트 추가하기
+
+    ```js
+    import React from 'react';
+    import './App.css';
+    import { HashRouter, Route } from 'react-router-dom';
+    import About from './routes/About';
+    import Home from './routes/Home';
+
+    function App () {
+    return (
+        <HashRouter>
+        <Route path="/" component={Home} />
+        <Route path="/about" component={About}/>
+        </HashRouter>
+    );  
+    }
+
+    export default App;
+    ```
+
+    path props를 "/"로 입력하는 이유는 localhost:3000에 접속하면 기본으로 보여줄 컴포넌트가 Home 컴포넌트이기 때문이다.
+
+    localhost:3000/#/about에 접속해 보면 About 컴포넌트와 함께 Movie 컴포넌트가 출력된다. /about에 접속하면 About 컴포넌트만 보여야 하는데 Movie 컴포넌트가 같이 보이는 문제가 발생한다. /about에 접속하면 /, /about 순서로 path props를 찾으므로 Home, About 컴포넌트가 모두 그려지기 때문이다. 이 현상을 고치려면 **Route 컴포넌트에 exact props를 추가하면 된다. exact props는 Route 컴포넌트가 path props와 정확하게 일치하는 URL에만 반응하도록 만들어 준다.**
+
+    (4) Route 컴포넌트에 exact props 추가하기
+
+    ```js
+    ...
+    function App () {
+    return (
+        <HashRouter>
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/about" component={About}/>
+        </HashRouter>
+    );  
+    }
+    ...
+    ```
+
+    ![about](./Image/about.png)
+
+    실행 결과를 보면 /about에 접속하면 About 컴포넌트만 출력되는 것을 확인할 수 있다. path props가 정확이 /인 경우에만 Home 컴포넌트만 출력되도록 설정했기 때문이다. 이제 About 컴포넌트의 모양을 다듬기 위해 스타일을 적용하면 된다.
+
+    (5) About.css 작성하기
+
+    routes 폴더에 About.css 파일을 생성한 다음 아래와 같이 입력하고 저장한다. 그런 다음 About.js에 About.css를 임포트한다.
+
+    ```css
+    .about__container {
+        box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
+        padding: 20px;
+        border-radius: 5px;
+        background-color: white;
+        margin: 0 auto;
+        margin-top: 100px;
+        width: 100%;
+        max-width: 400px;
+        font-weight: 300;
+    }
+
+    .about__container span:first-child {
+        font-size: 20px;
+    }
+
+    .about__container span:last-child {
+        display: block;
+        margin-top: 10px;
+    }
+    ```
+
+    ```js
+    import React from 'react';
+    import './About.css';
+
+    function About() {
+        return (
+            <div className="about__container">
+                <span>
+                    "Freedom is the freedom to say that two plus two make four. If that is granted, all else follows."
+                </span>
+                <span>- George Orwell, 1984</span>
+            </div>
+        );    
+    }
+
+    export default About;
+    ```
+
+    앱을 실행하여 /about으로 접속하면 아래와 같은 화면이 나타날 것이다. 이제 내비게이션 메뉴를 만들어 주면 된다.
+
+    ![about_css](./Image/about_css.png)
+
+1. 내비게이션 만들어 보기
+
+    내비게이션을 통해 다른 화면으로 이동하면 된다. 
+
+
+
+
