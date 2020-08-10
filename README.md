@@ -2347,6 +2347,8 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     path props를 "/"로 입력하는 이유는 localhost:3000에 접속하면 기본으로 보여줄 컴포넌트가 Home 컴포넌트이기 때문이다.
 
+    ![about_error](./Image/about_error.png)
+
     localhost:3000/#/about에 접속해 보면 About 컴포넌트와 함께 Movie 컴포넌트가 출력된다. /about에 접속하면 About 컴포넌트만 보여야 하는데 Movie 컴포넌트가 같이 보이는 문제가 발생한다. /about에 접속하면 /, /about 순서로 path props를 찾으므로 Home, About 컴포넌트가 모두 그려지기 때문이다. 이 현상을 고치려면 **Route 컴포넌트에 exact props를 추가하면 된다. exact props는 Route 컴포넌트가 path props와 정확하게 일치하는 URL에만 반응하도록 만들어 준다.**
 
     (4) Route 컴포넌트에 exact props 추가하기
