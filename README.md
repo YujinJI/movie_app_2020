@@ -2421,8 +2421,105 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
 1. 내비게이션 만들어 보기
 
-    내비게이션을 통해 다른 화면으로 이동하면 된다. 
+    내비게이션을 통해 다른 화면으로 이동한다. `<Home>과 <About>`이라는 2개의 버튼을 만들고, 각각의 버튼을 눌렀을 때 적절환 화면을 보여주도록 코딩할 것이다.
 
+    (1) Navigation 컴포넌트 만들기
+
+    components 폴더에 Navigation.js 파일을 만들고 아래와 같이 코드를 작성한다.
+
+    ```js
+    import React from 'react';
+
+    function Navigation() {
+        return (
+            <div>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+            </div>
+        );
+    }
+
+    export default Navigation;
+    ```
+
+    App.js 파일에 Navigation.js를 임포트 하고, Navigation 컴포넌트를 `<HashRouter>/<HashRouter>` 사이에 포함 시키면 된다.
+
+    코드를 저장 후 실행시키면 왼쪽 위에 Navigation 컴포넌트가 출력하는 Home, About 링크를 확인할 수 있다.
+
+    ![HomeAbout](./Image/HomeAbout.png)
+
+     **하지만 링크를 누를 때마다 리액트가 죽고 새 페이지가 열리는 문제(화면 전체가 새로 고침되는 문제)가 있다.** a 엘리먼트의 href 속성은 페이지 전체를 다시 그리는 특징이 있기 때문이다. 이 문제를 해결하려면 **react-router-dom의 Link 컴포넌트를 사용하면 된다.**
+
+     (3) a 엘리먼트 Link 컴포넌트로 바꾸기
+
+     Navigation 컴포넌트에 Link 컴포넌트를 임포트한 다음 a 엘리먼트를 Link 엘리먼트로 바꿔준다. 그리고 href 속성은 to로 바꿔준다.
+
+     ```js
+    import React from 'react';
+    import { Link } from 'react-router-dom';
+
+    function Navigation() {
+        return (
+            <div>
+                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
+            </div>
+        );
+    }
+
+    export default Navigation;
+     ```
+
+     이제 페이지 전체가 다시 새로 고침되지 않고 나타나는것을 확인할 수 있다. 여기서 중요한 내용은 **Link, Router 컴포넌트는 반드시 HashRouter 안에 포함되어야 한다는 것**이다
+
+     > Navigation 컴포넌트에서 Link 컴포넌트를 반환하므로 Navigation 컴포넌트는 HashRouter 컴포넌트 안에 존재해야 한다.
+
+    (4) Navigation 컴포넌트 스타일링하기
+
+    마지막으로 내비게이션을 스타일링해 보자. components 폴더에 Navigation.css 파일을 만들고 아래와 같이 작성한 다음 Navigation 컴포넌트에 임포트 시키면 된다. 
+
+    ```css
+    .nav {
+        z-index: 1;
+        position: fixed;
+        top: 50px;
+        left: 10px;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        padding: 10px 20px;
+        box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
+        border-radius: 5px;
+    }
+
+    @media screen and (max-width: 1090px) {
+        .nav {
+            left: initial;
+            top: initial;
+            bottom: 0px;
+            width: 100%;
+        }
+    }
+
+    .nav a {
+        text-decoration: none;
+        color: #0008fc;
+        text-transform: uppercase;
+        font-size: 12px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .nav a:not(:last-child) {
+        margin-bottom: 20px;
+    }
+    ```
+
+    ![navigation_css](./Image/navigation_css.png)
+
+    ![navigation_css](./Image/navigation_css2.png)
+
+    
 
 
 
