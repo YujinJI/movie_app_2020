@@ -2525,5 +2525,151 @@ Mobile-X 2020 하계 세미나 클론 코딩 영화 평점 웹서비스
 
     여기서는 영화 카드를 누르면 상세 정보를 보여주는 기능을 만들 것이다. 이 기능을 만들기 위해서는 route props를 반드시 이해해야 한다. route props란 라우팅 대상이 되는 컴포넌트에 넘겨주는 기본 props를 말한다. 다시 말해서 직접 넘겨주지 않아도 기본으로 넘어가는 route props라는 것이 있고, 이것을 이용해야 영화 데이터를 상세 정보 컴포넌트에 전달할 수 있다.
 
+    (1) Movie 컴포넌트에 Link 컴포넌트 추가하기
+
+    ```js
+    import React from 'react';
+    import PropTypes from 'prop-types';
+    import './Movie.css';
+    import { Link } from 'react-router-dom';
+    // Movie 컴포넌트에 Link 컴포넌트를 임포트
+
+    function Movie({ title, year, summary, poster, genres }) {
+        return (
+            <div className="movie"> 
+                <Link 
+                    to={{   
+                        pathname: '/movie-detail',
+                        state: { year, title, summary, poster, genres },
+                    }}
+                >
+                    <img src={poster} alt={title} title={title} />
+                    <div className="movie__data">
+                        <h3 className="movie__title">{title}</h3>
+                        <h5 className="movie__year">{year}</h5>
+                        <ul className="movie__genres">
+                            {genres.map((genre, index) => {
+                                return <li key={index} className="movie__genre">{genre}</li>;
+                            })}
+                        </ul>
+                        <p className="movie__summary">{summary.slice(0, 180)}...</p>
+                    </div>
+                </Link>
+            </div>
+        );
+    }
+
+    Movie.propTypes = {
+        year : PropTypes.number.isRequired,
+        title : PropTypes.string.isRequired,
+        summary : PropTypes.string.isRequired,
+        poster : PropTypes.string.isRequired,
+        genres : PropTypes.arrayOf(PropTypes.string).isRequired,
+    };
+
+    export default Movie;
+    ```
+
+    (2) Detail 컴포넌트 만들기
+
+    route 폴더에 Detail 컴포넌트 추가.
+
+    ```js
+    import React from 'react';
+
+    function Detail(props) {
+        return <span>hello</span>;
+    }
+
+    export default Detail;
+    ```
+
+    App.js 파일에 Detail 컴포넌트 임포트하고, Route 컴포넌트에서 Detail 컴포넌트 그려주도록 아래와 같이 코드를 작성하자.
+
+    ```js
+    import React from 'react';
+    import './App.css';
+    import { HashRouter, Route } from 'react-router-dom';
+    import About from './routes/About';
+    import Home from './routes/Home';
+    import Navigation from './components/Navigation';
+    import Detail from './routes/Detail';
+
+    function App () {
+    return (
+        <HashRouter>
+        <Navigation />
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/about" component={About}/>
+        <Route path="/movie-detail" component={Detail} />
+        </HashRouter>
+    );  
+    }
+
+    export default App;
+    ```
+
+
+1. 리다이렉트 기능 만들어 보기
+
+    리다이렉트 기능을 위해서는 route props의 history 키를 활용해야 한다. history 키에는 push, go, goBack, goForward와 같은 키가 있는데 그 키에는 URL을 변경해 주는 함수들이 들어 있다. 
+
+    (1) Detail 컴포넌트 클래스형 컴포넌트로 변경하고, push() 함수 사용하기
+
+    location.state가 undefined인 경우 history.push("/")를 실행하도록 아래와 같이 코드를 작성한다.
+
+    ```js
+    import React from 'react';
+    import { loadOptions } from '@babel/core';
+
+    class Detail extends React.Component {
+        componentDidMount() {
+            const { location, history } = this.props;
+            if (location.state == undefined) {
+                history.push('/');
+            }
+        }
+
+        render() {
+            return <span>hello</span>;
+        }
+    }
+
+    export default Detail;
+    ```
+
+    영화 앱을 실행한 다음 직접 주소를 입력해서 /movie-detail으로 이동하면 Home으로 돌아오게 되는것을 확인할 수 있다.
+
+    (2) 영화 제목 출력하기
+
+    Detail.js 파일을 아래와 같이 수정해 준다. Movie 컴포넌트로부터 전달받은 영화 데이터는 location.state에 들어 있었다. 출력값을 location.state.title로 한다.
+
+    ```js
+    ...
+    render() {
+        const { location } = this.props;
+        return <span>{location.state.title}</span>;
+    }
+    ...
+    ```
+
+    (3) location.state 확인하기
+
+    location.state가 없으면 render() 함수가 null을 반환하도록 수정
+
+    ```js
+    ...
+    render() {
+        const { location } = this.props;
+        if (location.state) {
+            return <span>{location.state.title}</span>;
+        } else {
+            return null;
+        }
+    }
+    ...
+    ```
+
+    영화앱 완..성....!!
 
 

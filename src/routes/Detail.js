@@ -1,10 +1,9 @@
 import React from 'react';
-import { loadOptions } from '@babel/core';
 
 class Detail extends React.Component {
     componentDidMount() {
         const { location, history } = this.props;
-        if (location.state == undefined) {
+        if (location.state === undefined) {
             history.push('/');
         }
     }
